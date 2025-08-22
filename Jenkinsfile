@@ -34,6 +34,7 @@ pipeline {
                 }
             }
         }
+    }
 
        
 
@@ -49,4 +50,5 @@ pipeline {
             echo 'Hello Failure'
         }
     }
+
 }
