@@ -17,7 +17,7 @@ pipeline {
         string(name: 'appVersion', description: 'Image version of the application')
         choice(name: 'deploy_to', choices: ['dev', 'qa', 'prod'], description: 'Pick the Environment')
     }
-    // Build
+
     stages {
         stage('Deploy') {
             steps {
@@ -34,12 +34,12 @@ pipeline {
                 }
             }
         }
-    }
-    stage('Check status') {
-        steps {
-            script {
-                withAWS(credentials : 'jenkins-ecr-user', region: 'us-east-1') {
-                     def deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/catalogue --timeout=30s -n $PROJECT || echo FAILED").trim()
+
+        stage('Check status') {
+            steps {
+                script {
+                    withAWS(credentials : 'jenkins-ecr-user', region: 'us-east-1') {
+                        def deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/catalogue --timeout=30s -n $PROJECT || echo FAILED").trim()
                         if (deploymentStatus.contains("successfully rolled out")) {
                             echo "Deployment is success"
                         } else {
@@ -50,11 +50,11 @@ pipeline {
                             def rollbackStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/catalogue --timeout=30s -n $PROJECT || echo FAILED").trim()
                             if (rollbackStatus.contains("successfully rolled out")) {
                                 error "Deployment is Failure, Rollback Success"
-                            }
-                            else{
+                            } else {
                                 error "Deployment is Failure, Rollback Failure. Application is not running"
                             }
                         }
+                    }
                 }
             }
         }
