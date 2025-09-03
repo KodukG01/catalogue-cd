@@ -22,16 +22,6 @@ pipeline {
     }
 
     stages {
-        
-    stage('Deploy') {
-            steps {
-                script {
-                    def packageJson = readJSON file: 'package.json'
-                    appVersion = packageJson.version
-                    echo "Package version: ${appVersion}"
-                }
-            }
-        }
        
         stage('Deploy') {
             steps {
