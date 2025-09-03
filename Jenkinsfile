@@ -7,7 +7,7 @@ pipeline {
         appVersion = ''
         REGION  = "us-east-1"
         ACC_ID  = "108717859359"
-        PROJECT =  "roboshop"
+        PROJECT = "roboshop"
         COMPONENT = "catalogue"
     }
 
@@ -18,19 +18,18 @@ pipeline {
     parameters {
         string(name: 'appVersion', description: 'Image version of the application')
         choice(name: 'deploy_to', choices: ['dev', 'qa', 'prod'], description: 'Pick the environment')
-        
     }
 
     stages {
-       
         stage('Deploy') {
             steps {
                 script {
-                    withAWS(credentials: 'jenkins-ecr-user', region: 'us-east-1')
+                    withAWS(credentials: 'jenkins-ecr-user', region: 'us-east-1') {
                         sh """
                             aws eks update-kubeconfig --region $REGION --name "$PROJECT-${params.deploy_to}"
                             kubectl get nodes
                         """
+                    }
                 }
             }
         }
@@ -46,6 +45,6 @@ pipeline {
         }
         failure {
             echo "pipeline is failure"
-            }
         }
     }
+}
