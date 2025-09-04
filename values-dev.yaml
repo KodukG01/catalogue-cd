@@ -1,6 +1,7 @@
 deployment:
-  imageURL: gautamjames/catalogue
+  imageURL: 108717859359.dkr.ecr.us-east-1.amazonaws.com/roboshop/catalogue
   imageVersion: IMAGE_VERSION
+
 hpa:
   maxReplicas: 10
   utilisation: 75
