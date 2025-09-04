@@ -39,6 +39,7 @@ pipeline {
         stage('Check Status') {
             steps {
                 script {
+                    withAWS(credentials: 'jenkins-ecr-user', region: 'us-east-1') {
                     def deploymentStatus = sh(
                         returnStdout: true,
                         script: "kubectl rollout status deployment/catalogue --request-timeout=30s || echo FAILED"
@@ -67,6 +68,7 @@ pipeline {
             }
         }
     }
+}
 
     post {
         always {
